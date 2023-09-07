@@ -1,0 +1,43 @@
+// Connect to the database
+$conn = mysqli_connect('host', 'username', 'password', 'database');
+
+// Retrieve the resume data
+$result = mysqli_query($conn, 'SELECT * FROM resumes WHERE id = 1');
+$resume = mysqli_fetch_assoc($result);
+
+// Create a new PDF document
+$pdf = new FPDF();
+$pdf->AddPage();
+
+// Add the resume data to the PDF
+$pdf->SetFont('Arial','B',16);
+$pdf->Cell(40,10, $resume['name']);
+$pdf->Ln();
+$pdf->SetFont('Arial','',12);
+$pdf->Cell(40,10, $resume['email']);
+$pdf->Ln();
+$pdf->Cell(40,10, $resume['phone']);
+$pdf->Ln();
+
+$pdf->Cell(40,10, $resume['address']);
+$pdf->Ln();
+$pdf->Cell(40,10, $resume['city'].','.$resume['state'].' '.$resume['zip']);
+$pdf->Ln();
+$pdf->MultiCell(0,5, $resume['summary']);
+$pdf->Ln();
+
+$pdf->SetFont('Arial','B',14);
+$pdf->Cell(40,10, 'Education');
+$pdf->Ln();
+$pdf->SetFont('Arial','',12);
+$pdf->MultiCell(0,5, $resume['education']);
+$pdf->Ln();
+
+$pdf->SetFont('Arial','B',14);
+$pdf->Cell(40,10, 'Experience');
+$pdf->Ln();
+$pdf->SetFont('Arial','',12);
+$pdf->MultiCell(0,5, $resume['experience']);
+
+// Output the PDF
+$pdf->Output();
